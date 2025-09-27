@@ -21,5 +21,57 @@
 - с Битрикс24 веб-скрейпингом (у Битрикс24 есть за дополнительную плату расширение BI-Аналитика, но в компании бесплатная версия, поэтому получение данных организовано таким образом),  
 - с сетевых папок, в которых хранятся регулярные выгрузки в формате .xlsx из 1С.  
 Пример DAG (таблица с курсами iSpring) в файле *DAG_iSpring.py*
+Кроме этого DAG есть модули других DAG.  
+С каждого Python модуля получаю алерты в Телеграм-чат, в случае, если загрузка прошла неудачно.   
+Пример такого алерта:  
+<img width="634" height="693" alt="image" src="https://github.com/user-attachments/assets/0f69f623-1e7d-47fc-b572-e55b9096afa3" />
+Из БД PostgreSQL получаю данные в дашборды, некоторые таблички получаю с вьюшек, вьюшки с материализованных представлений. Схема в БД:  
+<img width="973" height="198" alt="image" src="https://github.com/user-attachments/assets/b41a1dd7-72a1-4a8c-bdee-8a8fce9077ce" />
+Финальная обработка данных осуществляется в Power Query. 
+Разработку начали с важных метрик, двигаясь постепенно к второстепенным по мере выполнения отчетов. 
+Первый дашборд представлял метрику «Текучесть в компании» (ниже представлены первые 2 страницы): 
+<img width="624" height="349" alt="image" src="https://github.com/user-attachments/assets/897640d0-47c7-4174-90ff-2c3a8c1ee7ff" />
+<img width="624" height="350" alt="image" src="https://github.com/user-attachments/assets/0208383b-e672-4bec-acef-7ee17a5f22c2" />
+Модель данных получилась такая:  
+<img width="973" height="395" alt="image" src="https://github.com/user-attachments/assets/4b63588e-8719-4946-838c-6777ba0c6712" />
+Второй дашборд представлял метрику «Вовлеченность в компании» (ниже представлены первые 2 страницы): 
+<img width="624" height="351" alt="image" src="https://github.com/user-attachments/assets/756495a4-6bed-4d2b-b85f-3b346b623fa5" />
+<img width="624" height="351" alt="image" src="https://github.com/user-attachments/assets/f135f4fe-8de1-4397-baf3-b6c89da077cc" />
+Модель данных получилась такая:  
+<img width="624" height="252" alt="image" src="https://github.com/user-attachments/assets/0753636a-216f-42f0-a48b-575ae8209420" />
+Следующий дашборд по оценке «Внутреннего NPS» - считается по формуле: (кол-во положительных оценок – кол-во отрицательных оценок) / общее кол-во оценок. Этот дашборд показывает количество и оценку внутренних задач в компании, выполняемых отделами или сотрудниками и оцениваемых постановщиками задач.  
+Ниже представлены первые две страницы:  
+<img width="624" height="351" alt="image" src="https://github.com/user-attachments/assets/3e41af51-a0bd-4ea9-978e-583618c6336b" />
+<img width="624" height="351" alt="image" src="https://github.com/user-attachments/assets/fecea77d-0a96-452f-9feb-247e757d8f7e" />
+Модель данных:  
+<img width="624" height="256" alt="image" src="https://github.com/user-attachments/assets/134b9cfc-3e0b-4764-b1aa-10745c4b635a" />
+Следующий дашборд по метрике «Изменения грейдов сотрудников».  
+Ниже представлены первые две страницы:  
+<img width="624" height="350" alt="image" src="https://github.com/user-attachments/assets/f7ff5f15-e864-423c-a7ac-112eca537fcd" />
+<img width="624" height="351" alt="image" src="https://github.com/user-attachments/assets/1d1fd667-5a8c-4527-8ea7-935326001295" />
+Модель данных:  
+<img width="624" height="253" alt="image" src="https://github.com/user-attachments/assets/f9ebaffe-5040-4c32-b3b5-771991859ab1" />
+Следующий дашборд по метрике «Адаптация сотрудников в компании».  
+Ниже представлены первые две страницы дашборда:  
+<img width="624" height="350" alt="image" src="https://github.com/user-attachments/assets/9a93dd4b-b8f1-40ac-88cb-370f8896f843" />
+<img width="624" height="352" alt="image" src="https://github.com/user-attachments/assets/1deaadd6-7f4e-44ac-b5a7-35e91fe1ee14" />
+Модель данных:  
+<img width="624" height="253" alt="image" src="https://github.com/user-attachments/assets/f547d999-c371-47d2-9aa1-6d559ab389c0" />
+Следующий дашборд показывает результаты прохождения сотрудниками компании курсов на iSpring:  
+<img width="624" height="351" alt="image" src="https://github.com/user-attachments/assets/e5d6f1ec-9757-4d8a-8c6b-ca385f832574" />
+Модель данных:  
+<img width="625" height="254" alt="image" src="https://github.com/user-attachments/assets/d723a002-db06-4890-9c04-6ee1f11ba987" />
+Итоговый дашборд включает объединение предыдущих дашбордов в один: «Карта здоровья».  
+Получился такой:  
+<img width="624" height="352" alt="image" src="https://github.com/user-attachments/assets/adace6b0-4d8e-42af-9781-1623bd77a9aa" />
+Данные в дашборд загружаются через Центр данных Одного озера подключением к семантическим моделям предыдущих дашбордов. Показатели на «Карте здоровья» подсвечиваются цветами, в зависимости от значений.  
+Общая схема источников данных:  
+<img width="571" height="971" alt="image" src="https://github.com/user-attachments/assets/2221574a-2b41-4cbd-bbba-946b95018fcf" />
+
+## Заключение  
+Все эти дашборды объединил в приложение, которым удобно пользоваться, так как основные показатели выведены в одном окне. При необходимости легко можно просмотреть более детально по каждому показателю. 
+
+
+
 
 
